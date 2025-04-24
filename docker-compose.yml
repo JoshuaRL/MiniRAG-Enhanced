@@ -1,0 +1,112 @@
+## MiniRAG Enhanced docker-compose using GHCR containers, and git clone
+# Taken from HKUDS LightRAG, LightRAG Server, and MiniRAG
+# For more info on those projects see https://github.com/HKUDS
+
+version: '3.8'
+
+services:
+  minirag:
+    image: ghcr.io/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME-minirag:latest # Set to specific branch, tag, or commit hash
+    # Alternatively, you can still build locally:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.minirag
+    #   args:
+    #     MINIRAG_VERSION: main
+    #     LIGHTRAG_VERSION: main
+    container_name: minirag
+    ports:
+      - "7861:7861"
+    volumes:
+      - ./data:/app/MiniRAG/data
+      - ./config:/app/MiniRAG/config
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=password
+      - POSTGRES_URI=postgresql://postgres:postgres@postgres:5432/lightrag
+    networks:
+      - minirag-network
+    restart: unless-stopped
+
+  webui:
+    image: ghcr.io/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME-webui:latest # Set to specific branch, tag, or commit hash
+    # Alternatively, you can still build locally:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.webui
+    #   args:
+    #     LIGHTRAG_VERSION: main
+    container_name: minirag-webui
+    ports:
+      - "3000:3000"
+    depends_on:
+      - minirag
+    environment:
+      - API_URL=http://minirag:7861
+    networks:
+      - minirag-network
+    restart: unless-stopped
+    
+  # External services that MiniRAG will connect to
+  neo4j:
+    image: neo4j:5.11
+    container_name: neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/password
+    volumes:
+      - neo4j-data:/data
+      - neo4j-logs:/logs
+    networks:
+      - minirag-network
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=lightrag
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - minirag-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 15433:80
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    networks:
+      - minirag-network
+    volumes:
+      - ${PWD}/pgadmin-data/:/var/lib/pgadmin/
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - minirag-network
+
+networks:
+  minirag-network:
+    driver: bridge
+
+volumes:
+  neo4j-data:
+  neo4j-logs:
+  postgres-data:
+  ollama-data:
