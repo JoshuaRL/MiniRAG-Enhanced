@@ -9,7 +9,7 @@ on:
   pull_request:
     branches: [ main ]
     paths:
-      - 'Dockerfile.minirag'
+      - 'Dockerfile'
   workflow_dispatch:
     inputs:
       minirag_version:
