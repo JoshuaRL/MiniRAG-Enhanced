@@ -31,8 +31,8 @@ RUN echo '{\n\
   "apiUrl": "http://minirag:7861"\n\
 }' > /app/config/server-config.json
 
-# Create .env file in the root directory
-RUN mkdir -p / && \
+# Check if .env file exists and only create it if it doesn't
+RUN if [ ! -f /.env ]; then \
     echo "LLM_BINDING=ollama" >> /.env && \
     echo "LLM_MODEL=llama3.2:1b-instruct-q8_0" >> /.env && \
     echo "LLM_BINDING_HOST=http://ollama:11434" >> /.env && \

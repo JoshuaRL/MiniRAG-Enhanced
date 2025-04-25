@@ -30,6 +30,8 @@ Supporting services:
 
 The easiest way to get started is using the pre-built images from GitHub Container Registry and [docker-compose(https://github.com/JoshuaRL/MiniRAG-Enhanced/blob/main/docker-compose.yml). The docker-compose file is configured to pull the latest pre-built images from this repository's GitHub Container Registry (GHCR) along with the necessary supporting services.
 
+Be aware that the docker-compose sets Ollama to pull a couple small models so that this will be functional. You're welcome to change that, if you prefer others (I do), but be sure to change the .env file in the root of the WebUI container so that the system uses the correct model.
+
 ### Updating to New Versions
 
 When the upstream MiniRAG or LightRAG repositories update:
