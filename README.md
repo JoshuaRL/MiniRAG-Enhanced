@@ -32,6 +32,8 @@ The easiest way to get started is using the pre-built images from GitHub Contain
 
 Be aware that the docker-compose sets Ollama to pull a couple small models so that this will be functional. You're welcome to change that, if you prefer others (I do), but be sure to change the .env file in the root of the WebUI container so that the system uses the correct model.
 
+If you already have some of these services running, either in Docker or locally, feel free to point the rest their way. 
+
 ### Updating to New Versions
 
 When the upstream MiniRAG or LightRAG repositories update:
@@ -159,6 +161,14 @@ services:
   #   image: postgres:15
   #   ...
 ```
+
+##Ollama Emulation
+LightRAG provides Ollama-compatible interfaces, aiming to emulate LightRAG as an Ollama chat model. This allows AI chat frontends supporting Ollama, such as Open WebUI, to access LightRAG easily.
+
+Connect Open WebUI to LightRAG
+After starting the lightrag-server, you can add an Ollama-type connection in the Open WebUI admin panel. And then a model named lightrag:latest will appear in Open WebUI's model management interface. Users can then send queries to LightRAG through the chat interface. You should install LightRAG as a service for this use case.
+
+Open WebUI uses an LLM to do the session title and session keyword generation task. So the Ollama chat completion API detects and forwards OpenWebUI session-related requests directly to the underlying LLM. See the [LightRAG Server documentation](https://github.com/HKUDS/LightRAG/tree/main/lightrag/api) for more informaion, as well as other runtime variables to be added to the .env file.
 
 ## Credits
 
