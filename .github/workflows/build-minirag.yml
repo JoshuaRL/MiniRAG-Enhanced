@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '/MiniRAG-Server/Dockerfile'
+      - 'MiniRAG-Server/Dockerfile'
       - '.github/workflows/build-minirag.yml'
   pull_request:
     branches: [ main ]
