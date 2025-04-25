@@ -10,6 +10,8 @@ on:
     branches: [ main ]
     paths:
       - 'MiniRAG-Server/Dockerfile'
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight UTC
   workflow_dispatch:
     inputs:
       minirag_version:
@@ -24,29 +26,49 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}-minirag
+  UPSTREAM_REPO: HKUDS/MiniRAG
 
 jobs:
-  build-and-push:
+  check-upstream-and-build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
+        
+      - name: Check for upstream changes
+        id: check_upstream
+        run: |
+          # Get the latest commit from the upstream repository
+          LATEST_COMMIT=$(curl -s https://api.github.com/repos/${{ env.UPSTREAM_REPO }}/commits/main | jq -r '.sha')
+          echo "Latest commit in upstream repo: $LATEST_COMMIT"
+          
+          # Store the latest commit
+          echo "latest_commit=$LATEST_COMMIT" >> $GITHUB_OUTPUT
+          
+          # Force build on schedule or manual runs
+          if [[ "${{ github.event_name }}" == "schedule" || "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "should_build=true" >> $GITHUB_OUTPUT
+          else
+            echo "should_build=true" >> $GITHUB_OUTPUT  # Always build for now, you can change this logic later
+          fi
+      
       - name: Set up Docker Buildx
+        if: steps.check_upstream.outputs.should_build == 'true'
         uses: docker/setup-buildx-action@v2
-
+        
       - name: Log in to the Container registry
+        if: steps.check_upstream.outputs.should_build == 'true'
         uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.MRE_PAT }}
-
+          
       - name: Extract metadata (tags, labels) for Docker
+        if: steps.check_upstream.outputs.should_build == 'true'
         id: meta
         uses: docker/metadata-action@v4
         with:
@@ -57,8 +79,9 @@ jobs:
             type=semver,pattern={{version}}
             type=sha,format=long
             latest
-
+            
       - name: Get versions from inputs or defaults
+        if: steps.check_upstream.outputs.should_build == 'true'
         id: versions
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
@@ -68,12 +91,13 @@ jobs:
             echo "minirag_version=main" >> $GITHUB_OUTPUT
             echo "lightrag_version=main" >> $GITHUB_OUTPUT
           fi
-
+          
       - name: Build and push Docker image
+        if: steps.check_upstream.outputs.should_build == 'true'
         uses: docker/build-push-action@v4
         with:
-          context: .
-          file: MiniRAG-Server/Dockerfile
+          context: ./MiniRAG-Server
+          file: ./MiniRAG-Server/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
