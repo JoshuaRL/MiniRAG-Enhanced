@@ -102,6 +102,9 @@ services:
     container_name: ollama
     ports:
       - "11434:11434"
+    environment:
+      - OLLAMA_CONTEXT_LENGTH=8192
+    tty: true
     volumes:
       - ollama-data:/root/.ollama
     networks:
