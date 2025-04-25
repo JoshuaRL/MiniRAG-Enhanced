@@ -6,7 +6,7 @@ version: '3.8'
 
 services:
   minirag:
-    image: ghcr.io/JoshuaRL/MiniRAG-Enhanced-minirag:latest # Set to specific branch, tag, or commit hash
+    image: ghcr.io/JoshuaRL/MiniRAG-Enhanced-minirag:latest
     # Alternatively, you can still build locally:
     # build:
     #   context: .
@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
 
   webui:
-    image: ghcr.io/JoshuaRL/MiniRAG-Enhanced-webui:latest # Set to specific branch, tag, or commit hash
+    image: ghcr.io/JoshuaRL/MiniRAG-Enhanced-webui:latest
     # Alternatively, you can still build locally:
     # build:
     #   context: .
@@ -118,7 +118,9 @@ networks:
     driver: bridge
 
 volumes:
-  neo4j-data:
-  neo4j-logs:
+  neo4j_data:
+  neo4j_logs:
+  neo4j_import:
+  neo4j_plugins
   postgres-data:
   ollama-data:
