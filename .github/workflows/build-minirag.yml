@@ -9,7 +9,7 @@ on:
   pull_request:
     branches: [ main ]
     paths:
-      - 'Dockerfile'
+      - 'MiniRAG-Server/Dockerfile'
   workflow_dispatch:
     inputs:
       minirag_version:
@@ -73,7 +73,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: Dockerfile
+          file: MiniRAG-Server/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
