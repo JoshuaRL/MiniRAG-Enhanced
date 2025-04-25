@@ -48,7 +48,7 @@ RUN if [ ! -f /app/.env ]; then \
 fi
 
 # Expose the port the API will run on
-EXPOSE 3000
+EXPOSE 7070
 
 # Start the web server
 CMD ["lightrag-server"]
