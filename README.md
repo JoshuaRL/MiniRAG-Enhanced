@@ -55,7 +55,7 @@ Or if you have some local automatic update method, like Watchtower, feel free to
 
 ### Building Locally
 
-If you prefer to build the images yourself:
+If you prefer to build the images yourself and change ports, connections, passwords, database names, etc. this is the process:
 
 ```bash
 # Clone this repository
