@@ -9,7 +9,7 @@ on:
   pull_request:
     branches: [ main ]
     paths:
-      - 'Dockerfile.webui'
+      - 'Dockerfile'
   workflow_dispatch:
     inputs:
       lightrag_version:
