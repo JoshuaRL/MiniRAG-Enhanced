@@ -1,0 +1,84 @@
+name: Build and Push MiniRAG Server Container
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '/MiniRAG-Server/Dockerfile'
+      - '.github/workflows/build-minirag.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'Dockerfile.minirag'
+  workflow_dispatch:
+    inputs:
+      minirag_version:
+        description: 'MiniRAG version (branch, tag, or commit)'
+        required: true
+        default: 'main'
+      lightrag_version:
+        description: 'LightRAG version (branch, tag, or commit)'
+        required: true
+        default: 'main'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}-minirag
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.MRE_PAT }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=sha,format=long
+            latest
+
+      - name: Get versions from inputs or defaults
+        id: versions
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "minirag_version=${{ github.event.inputs.minirag_version }}" >> $GITHUB_OUTPUT
+            echo "lightrag_version=${{ github.event.inputs.lightrag_version }}" >> $GITHUB_OUTPUT
+          else
+            echo "minirag_version=main" >> $GITHUB_OUTPUT
+            echo "lightrag_version=main" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile.minirag
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            MINIRAG_VERSION=${{ steps.versions.outputs.minirag_version }}
+            LIGHTRAG_VERSION=${{ steps.versions.outputs.lightrag_version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
