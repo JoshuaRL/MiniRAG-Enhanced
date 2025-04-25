@@ -44,7 +44,7 @@ RUN if [ ! -f /app/.env ]; then \
     echo "EMBEDDING_BINDING_HOST=http://localhost:11434" >> /.env && \
     echo "EMBEDDING_MODEL=nomic-embed-text:latest" >> /.env && \
     echo "EMBEDDING_DIM=2048" >> /.env && \
-    echo "# EMBEDDING_BINDING_API_KEY=your_api_key" >> /env
+    echo "# EMBEDDING_BINDING_API_KEY=your_api_key" >> /env \
 fi
 
 # Expose the port the API will run on
