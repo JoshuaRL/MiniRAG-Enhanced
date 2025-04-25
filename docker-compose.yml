@@ -6,7 +6,7 @@ version: '3.8'
 
 services:
   minirag:
-    image: ghcr.io/JoshuaRL/MiniRAG-Enhanced-minirag:latest
+    image: ghcr.io/joshuarl/minirag-enhanced-minirag:latest
     # Alternatively, you can still build locally:
     # build:
     #   context: .
@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
 
   webui:
-    image: ghcr.io/JoshuaRL/MiniRAG-Enhanced-webui:latest
+    image: ghcr.io/joshuarl/minirag-enhanced-minirag:latest
     # Alternatively, you can still build locally:
     # build:
     #   context: .
