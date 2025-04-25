@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
 
   webui:
-    image: ghcr.io/joshuarl/minirag-enhanced-minirag:latest
+    image: ghcr.io/joshuarl/minirag-enhanced-webui:latest
     # Alternatively, you can still build locally:
     # build:
     #   context: .
