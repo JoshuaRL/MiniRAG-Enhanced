@@ -33,18 +33,18 @@ RUN echo '{\n\
 
 # Check if .env file exists and only create it if it doesn't
 RUN if [ ! -f /app/.env ]; then \
-    echo "LLM_BINDING=ollama" >> /.env && \
-    echo "LLM_MODEL=llama3.2:1b-instruct-q8_0" >> /.env && \
-    echo "LLM_BINDING_HOST=http://ollama:11434" >> /.env && \
-    echo "# LLM_BINDING_API_KEY=your_api_key" >> /.env && \
-    echo "### Max tokens sent to LLM (based on your Ollama Server capacity)" >> /.env && \
-    echo "MAX_TOKENS=8192" >> /.env && \
-    echo "" >> /.env && \
-    echo "EMBEDDING_BINDING=ollama" >> /.env && \
-    echo "EMBEDDING_BINDING_HOST=http://localhost:11434" >> /.env && \
-    echo "EMBEDDING_MODEL=nomic-embed-text:latest" >> /.env && \
-    echo "EMBEDDING_DIM=2048" >> /.env && \
-    echo "# EMBEDDING_BINDING_API_KEY=your_api_key" >> /env \
+    echo "LLM_BINDING=ollama" >> /app/.env && \
+    echo "LLM_MODEL=llama3.2:1b-instruct-q8_0" >> /app/.env && \
+    echo "LLM_BINDING_HOST=http://ollama:11434" >> /app/.env && \
+    echo "# LLM_BINDING_API_KEY=your_api_key" >> /app/.env && \
+    echo "### Max tokens sent to LLM (based on your Ollama Server capacity)" >> /app/.env && \
+    echo "MAX_TOKENS=8192" >> /app/.env && \
+    echo "" >> /app/.env && \
+    echo "EMBEDDING_BINDING=ollama" >> /app/.env && \
+    echo "EMBEDDING_BINDING_HOST=http://localhost:11434" >> /app/.env && \
+    echo "EMBEDDING_MODEL=nomic-embed-text:latest" >> /app/.env && \
+    echo "EMBEDDING_DIM=2048" >> /app/.env && \
+    echo "# EMBEDDING_BINDING_API_KEY=your_api_key" >> /app/.env; \
 fi
 
 # Expose the port the API will run on
