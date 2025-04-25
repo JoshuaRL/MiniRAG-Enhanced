@@ -20,7 +20,7 @@ RUN git clone -b ${LIGHTRAG_VERSION} https://github.com/HKUDS/LightRAG.git /app/
 WORKDIR /app/LightRAG/lightrag/api/server
 
 # Install dependencies
-RUN npm install
+# RUN npm install
 
 # Build the frontend
 RUN npm run build
