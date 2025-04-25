@@ -51,7 +51,7 @@ services:
     
   # External services that MiniRAG will connect to
   neo4j:
-    image: neo4j:5.11
+    image: neo4j:latest
     container_name: neo4j
     ports:
       - "7474:7474"
