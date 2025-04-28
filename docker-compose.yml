@@ -88,14 +88,18 @@ services:
     image: dpage/pgadmin4
     ports:
       - 15433:15433
-    env_file:
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=email@name.tld
+      - PGADMIN_DEFAULT_PASSWORD={pgadminpwdhere}
+      # - PGADMIN_DEFAULT_PASSWORD_FILE=.env  # 
+    env_file: # Update the settings here if using default password file
       - .env
     depends_on:
       - postgres
     networks:
       - minirag-network
     volumes:
-      - ${PWD}/pgadmin-data/:/var/lib/pgadmin/
+      - ${PWD}/pgadmin-data/:/var/lib/pgadmin/ # Update the path or this container may fail to build
 
   ollama:
     image: ollama/ollama:latest
@@ -109,7 +113,7 @@ services:
       - ollama-data:/root/.ollama
     networks:
       - minirag-network
-    command:
+    command: # Update this command for your preferred default models, but remember to change the server .env
       - "-c"
       - "sleep 3; OLLAMA_HOST=ollama:11434 ollama pull llama3.2:1b-instruct-q8_0; OLLAMA_HOST=ollama:11434 ollama pull nomic-embed-text"
 
