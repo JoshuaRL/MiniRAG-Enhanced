@@ -1,4 +1,4 @@
-## MiniRAG Enhanced docker-compose using GHCR containers, and git clone
+## MiniRAG Enhanced docker-compose using GHCR containers
 # Taken from HKUDS LightRAG, LightRAG Server, and MiniRAG
 # For more info on those projects see https://github.com/HKUDS
 
@@ -7,14 +7,10 @@ version: '3.8'
 services:
   minirag:
     image: ghcr.io/joshuarl/minirag-enhanced-minirag:latest
-    # Alternatively, you can still build locally:
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile.minirag
-    #   args:
-    #     MINIRAG_VERSION: main
-    #     LIGHTRAG_VERSION: main
     container_name: minirag
+      args:
+        MINIRAG_VERSION: main
+        LIGHTRAG_VERSION: main
     ports:
       - "7861:7861"
     volumes:
@@ -24,7 +20,7 @@ services:
       - OLLAMA_BASE_URL=http://ollama:11434
       - NEO4J_URI=bolt://neo4j:7687
       - NEO4J_USER=neo4j
-      - NEO4J_PASSWORD=password
+      - NEO4J_PASSWORD=my_password123
       - POSTGRES_URI=postgresql://postgres:postgres@postgres:5432/lightrag
     networks:
       - minirag-network
@@ -32,24 +28,21 @@ services:
 
   webui:
     image: ghcr.io/joshuarl/minirag-enhanced-webui:latest
-    # Alternatively, you can still build locally:
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile.webui
-    #   args:
-    #     LIGHTRAG_VERSION: main
     container_name: minirag-webui
+      args:
+        LIGHTRAG_VERSION: main
     ports:
       - "7070:7070"
     depends_on:
       - minirag
     environment:
       - API_URL=http://minirag:7861
+      - JWT_SECRET=your-secret-key-here
+      - TOKEN_EXPIRE_HOURS=4
     networks:
       - minirag-network
     restart: unless-stopped
     
-  # External services that MiniRAG will connect to
   neo4j:
     image: neo4j:latest
     container_name: neo4j
@@ -58,10 +51,6 @@ services:
       - "7687:7687"
     environment:
       - NEO4J_AUTH=neo4j/my_password123
-      - NEO4J_apoc_export_file_enabled=true
-      - NEO4J_apoc_import_file_enabled=true
-      - NEO4J_apoc_import_file_use__neo4j__config=true
-      - NEO4J_PLUGINS=["apoc", "graph-data-science"]
     volumes:
       - ./neo4j_db/data:/data
       - ./neo4j_db/logs:/logs
@@ -87,12 +76,11 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     ports:
-      - 15433:15433
+      - "15433:15433"
     environment:
       - PGADMIN_DEFAULT_EMAIL=email@name.tld
       - PGADMIN_DEFAULT_PASSWORD={pgadminpwdhere}
-      # - PGADMIN_DEFAULT_PASSWORD_FILE=.env  # 
-    env_file: # Update the settings here if using default password file
+    env_file:
       - .env
     depends_on:
       - postgres
@@ -108,7 +96,6 @@ services:
       - "11434:11434"
     environment:
       - OLLAMA_CONTEXT_LENGTH=8192
-    tty: true
     volumes:
       - ollama-data:/root/.ollama
     networks:
@@ -124,8 +111,6 @@ networks:
 volumes:
   neo4j_data:
   neo4j_logs:
-  neo4j_import:
-  neo4j_plugins:
   postgres-data:
   pgadmin-data:
   ollama-data:

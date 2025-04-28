@@ -2,53 +2,39 @@
 # Taken from HKUDS LightRAG, LightRAG Server, and MiniRAG
 # For more info see https://github.com/HKUDS
 
-# Use Python slim as base image
-FROM python:3.11-slim
+# Base stage with Python slim for consistency
+FROM python:3.11-slim as builder
 
-# Install git and dependencies
+WORKDIR /app
+
+# Install build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
     git \
+    build-essential \
+    pkg-config \
+    libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Clone LightRAG at specified version
-WORKDIR /app
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Clone LightRAG repository for frontend dependencies
 ARG LIGHTRAG_VERSION=main
-RUN git clone https://github.com/HKUDS/LightRAG.git . && \
-    git checkout ${LIGHTRAG_VERSION}
 
-# Install the package
-RUN pip install --no-cache-dir -e .
+RUN git clone -b ${LIGHTRAG_VERSION} https://github.com/HKUDS/LightRAG.git . \
+    && pip install --no-cache-dir -e ".[ui]"
 
-# Set environment variables
-ENV FLASK_APP=lightrag.api.app
-ENV FLASK_ENV=production
+# Final stage
+FROM python:3.11-slim
 
-# Modify the server configuration to connect to MiniRAG API
-RUN mkdir -p /app/config
+WORKDIR /app
 
-# Create a configuration file to point to MiniRAG API
-RUN echo '{\n\
-  "apiUrl": "http://minirag:7861"\n\
-}' > /app/config/server-config.json
+# Copy only necessary files from builder
+COPY --from=builder /root/.local /root/.local
+COPY .env.example .env
 
-# Check if .env file exists and only create it if it doesn't
-RUN if [ ! -f /app/.env ]; then \
-    echo "LLM_BINDING=ollama" >> /app/.env && \
-    echo "LLM_MODEL=llama3.2:1b-instruct-q8_0" >> /app/.env && \
-    echo "LLM_BINDING_HOST=http://ollama:11434" >> /app/.env && \
-    echo "# LLM_BINDING_API_KEY=your_api_key" >> /app/.env && \
-    echo "### Max tokens sent to LLM (based on your Ollama Server capacity)" >> /app/.env && \
-    echo "MAX_TOKENS=8192" >> /app/.env && \
-    echo "" >> /app/.env && \
-    echo "EMBEDDING_BINDING=ollama" >> /app/.env && \
-    echo "EMBEDDING_BINDING_HOST=http://localhost:11434" >> /app/.env && \
-    echo "EMBEDDING_MODEL=nomic-embed-text:latest" >> /app/.env && \
-    echo "EMBEDDING_DIM=2048" >> /app/.env && \
-    echo "# EMBEDDING_BINDING_API_KEY=your_api_key" >> /app/.env; \
-fi
-
-# Expose the port the API will run on
+# Expose the port for the WebUI frontend
 EXPOSE 7070
 
-# Start the web server
+# Set entrypoint to start the web server with authentication
 CMD ["lightrag-server"]
