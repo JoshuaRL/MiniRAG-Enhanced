@@ -40,7 +40,7 @@ services:
     #     LIGHTRAG_VERSION: main
     container_name: minirag-webui
     ports:
-      - "3000:3000"
+      - "7070:7070"
     depends_on:
       - minirag
     environment:
