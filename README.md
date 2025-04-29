@@ -66,13 +66,13 @@ cd MiniRAG-Enhanced
   minirag:
     build:
       context: .
-      dockerfile: MiniRag-Server/Dockerfile
+      dockerfile: Dockerfile.server
 
 ...
   webui:
     build:
       context: .
-      dockerfile: MiniRag-WebUI/Dockerfile
+      dockerfile: Dockerfile.webui
 
 # Edit .env file for any changes you want
 
@@ -101,12 +101,14 @@ API endpoints are available at http://localhost:7861
 ###Directory Structure
 ```
 MiniRAG-Enhanced/
-├── Dockerfile.minirag       # MiniRAG backend Dockerfile
+├── Dockerfile.server       # MiniRAG backend Dockerfile
 ├── Dockerfile.webui         # WebUI frontend Dockerfile
 ├── docker-compose.yml       # Service orchestration
 ├── .github/workflows/       # GitHub Actions for CI/CD
 │   ├── build-minirag.yml    # Workflow for MiniRAG container
 │   └── build-webui.yml      # Workflow for WebUI container
+├── .env.example             # Example server configuration file
+└── api_entrypoint.py        # API Python Script
 ├── data/                    # Persistent data volume
 └── config/                  # Configuration files
 ```
