@@ -4,12 +4,12 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'MiniRAG-Server/Dockerfile'
+      - 'Dockerfile.server'
       - '.github/workflows/build-minirag.yml'
   pull_request:
     branches: [ main ]
     paths:
-      - 'MiniRAG-Server/Dockerfile'
+      - 'Dockerfile.server'
   schedule:
     - cron: '0 0 * * *'  # Run daily at midnight UTC
   workflow_dispatch:
@@ -97,7 +97,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./MiniRAG-Server
-          file: ./MiniRAG-Server/Dockerfile
+          file: ./Dockerfile.server
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
