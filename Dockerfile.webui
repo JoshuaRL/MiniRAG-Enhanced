@@ -30,7 +30,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Copy configuration file first to ensure it exists
-COPY --from=builder_webui_config /app/.env.example .env.example
+COPY --from=builder /app/.env.example .env.example
 
 # Conditionally copy .env.example to .env only if .env doesn't exist
 RUN if [ ! -f "/app/.env" ]; then \
