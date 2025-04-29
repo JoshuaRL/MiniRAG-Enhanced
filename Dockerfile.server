@@ -3,7 +3,7 @@
 # For more info see https://github.com/HKUDS
 
 # Base stage with Python slim and build dependencies
-FROM python:3.11-slim as builder
+FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
@@ -45,21 +45,34 @@ RUN mkdir -p /app/MiniRAG/minirag/app \
     && echo 'from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get("/")\ndef read_root():\n    return {"message": "MiniRAG API is running"}' > /app/MinIRAG/minirag/app/api.py
 
 # Copy the actual entry point file only if it exists in the source directory
-COPY --chown=root:root api_entrypoint.py /app/MiniRAG/minirag/app/api.py || true
+RUN if [ -f api_entrypoint.py ]; then \
+    cp api_entrypoint.py /app/MiniRAG/minirag/app/api.py; \
+    fi
 
 # Create necessary directories for connectors
 RUN mkdir -p /app/MiniRAG/minirag/connectors/{ollama,neo4j,postgresql}
 
 # Copy connectors from LightRAG to MiniRAG
-RUN cp -r /app/LightRAG/lightrag/connectors/ollama/* /app/MiniRAG/minirag/connectors/ollama/ || true \
-    && cp -r /app/LightRAG/lightrag/connectors/neo4j/* /app/MiniRAG/minirag/connectors/neo4j/ || true \
-    && cp -r /app/LightRAG/lightrag/connectors/postgresql/* /app/MiniRAG/minirag/connectors/postgresql/ || true
+RUN if [ -d /app/LightRAG/lightrag/connectors/ollama ]; then \
+    cp -r /app/LightRAG/lightrag/connectors/ollama/* /app/MiniRAG/minirag/connectors/ollama/; \
+    fi && \
+    if [ -d /app/LightRAG/lightrag/connectors/neo4j ]; then \
+    cp -r /app/LightRAG/lightrag/connectors/neo4j/* /app/MiniRAG/minirag/connectors/neo4j/; \
+    fi && \
+    if [ -d /app/LightRAG/lightrag/connectors/postgresql ]; then \
+    cp -r /app/LightRAG/lightrag/connectors/postgresql/* /app/MiniRAG/minirag/connectors/postgresql/; \
+    fi
+
 
 # Create the API-related modules to enable WebUI connection
 WORKDIR /app/MiniRAG
 RUN mkdir -p minirag/api \
-    && cp -r /app/LightRAG/lightrag/api/routes /app/MiniRAG/minirag/api/ || true \
-    && cp -r /app/LightRAG/lightrag/api/schemas /app/MiniRAG/minirag/api/ || true
+RUN if [ -d /app/LightRAG/lightrag/api/routes ]; then \
+    cp -r /app/LightRAG/lightrag/api/routes /app/MiniRAG/minirag/api/; \
+    fi && \
+    if [ -d /app/LightRAG/lightrag/api/schemas ]; then \
+    cp -r /app/LightRAG/lightrag/api/schemas /app/MiniRAG/minirag/api/; \
+    fi
 
 # Create configuration directories
 RUN mkdir -p /app/MiniRAG/config
@@ -84,4 +97,4 @@ COPY --from=builder /root/.local /root/.local
 EXPOSE 7861
 
 # Set entrypoint to run the FastAPI application using Uvicorn with authentication and Ollama emulation
-CMD ["uvicorn", "minirag.app.app:app", "--host", "0.5", "--port", "9621"]
+CMD ["uvicorn", "minirag.app.app:app", "--host", "0.0.0.0", "--port", "9621"]
