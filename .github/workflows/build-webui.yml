@@ -4,12 +4,12 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'MiniRAG-WebUI/Dockerfile'
+      - 'Dockerfile.webui'
       - '.github/workflows/build-webui.yml'
   pull_request:
     branches: [ main ]
     paths:
-      - 'MiniRAG-WebUI/Dockerfile'
+      - 'Dockerfile.webui'
   schedule:
     - cron: '0 0 * * *'  # Run daily at midnight UTC
   workflow_dispatch:
@@ -90,7 +90,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./MiniRAG-WebUI
-          file: ./MiniRAG-WebUI/Dockerfile
+          file: ./Dockerfile.webui
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
