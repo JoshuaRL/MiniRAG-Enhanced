@@ -29,9 +29,13 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy only necessary files from builder
-COPY --from=builder /root/.local /root/.local
-COPY .env.example .env
+# Copy configuration file first to ensure it exists
+COPY --from=builder_webui_config /app/.env.example .env.example
+
+# Conditionally copy .env.example to .env only if .env doesn't exist
+RUN if [ ! -f "/app/.env" ]; then \
+    cp /app/.env.example /app/.env; \
+  fi
 
 # Expose the port for the WebUI frontend
 EXPOSE 7070

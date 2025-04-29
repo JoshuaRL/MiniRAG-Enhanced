@@ -40,6 +40,13 @@ RUN pip install --no-cache-dir \
     python-dotenv \
     sqlalchemy
 
+# Create necessary directories and entry point file
+RUN mkdir -p /app/MiniRAG/minirag/app \
+    && echo 'from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get("/")\ndef read_root():\n    return {"message": "MiniRAG API is running"}' > /app/MinIRAG/minirag/app/api.py
+
+# Copy the actual entry point file only if it exists in the source directory
+COPY --chown=root:root api_entrypoint.py /app/MinIRAG/minirag/app/api.py || true
+
 # Create necessary directories for connectors
 RUN mkdir -p /app/MiniRAG/minirag/connectors/{ollama,neo4j,postgresql}
 
@@ -72,11 +79,6 @@ WORKDIR /app/MiniRAG
 
 # Copy necessary files from builder
 COPY --from=builder /root/.local /root/.local
-
-# Conditionally copy .env.example to .env only if .env doesn't exist
-RUN if [ ! -f "/app/.env" ]; then \
-    cp /app/.env.example /app/.env; \
-  fi
 
 # Expose the default port for FastAPI (or the port your app uses)
 EXPOSE 7861

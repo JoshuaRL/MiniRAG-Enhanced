@@ -1,3 +1,8 @@
+import os
+if not os.path.exists('.env'):
+    # Copy default .env if none exists
+    os.system('cp .env.example .env')
+
 from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.security import APIKeyHeader
 import uvicorn
