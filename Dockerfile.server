@@ -42,7 +42,7 @@ RUN pip install --no-cache-dir \
 
 # Create necessary directories and entry point file
 RUN mkdir -p /app/MiniRAG/minirag/app \
-    && echo 'from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get("/")\ndef read_root():\n    return {"message": "MiniRAG API is running"}' > /app/MinIRAG/minirag/app/api.py
+    && echo 'from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get("/")\ndef read_root():\n    return {"message": "MiniRAG API is running"}' > /app/MiniRAG/minirag/app/api.py
 
 # Copy the actual entry point file only if it exists in the source directory
 RUN if [ -f api_entrypoint.py ]; then \
