@@ -97,8 +97,8 @@ Access the Web UI at http://localhost:3000
 Access Neo4j Browser at http://localhost:7474
 API endpoints are available at http://localhost:7861
 
-##Development
-###Directory Structure
+## Development
+### Directory Structure
 ```
 MiniRAG-Enhanced/
 ├── Dockerfile.server       # MiniRAG backend Dockerfile
@@ -113,10 +113,10 @@ MiniRAG-Enhanced/
 └── config/                  # Configuration files
 ```
 
-##Connecting to Existing Services
+## Connecting to Existing Services
 If you already have Ollama, Neo4j, or PostgreSQL running, you can modify the docker-compose file to use those instead:
 
-###Using External Ollama
+### Using External Ollama
 ```
 services:
   minirag:
@@ -130,7 +130,7 @@ services:
   #   image: ollama/ollama:latest
   #   ...
 ```
-###Using External Neo4j
+### Using External Neo4j
 ```
 services:
   minirag:
@@ -147,7 +147,7 @@ services:
   #   ...
 ```
 
-###Using External PostgreSQL
+### Using External PostgreSQL
 ```
 services:
   minirag:
@@ -162,16 +162,16 @@ services:
   #   ...
 ```
 
-##Ollama Emulation
+## Ollama Emulation
 
 LightRAG provides Ollama-compatible interfaces, aiming to emulate LightRAG as an Ollama chat model. This allows AI chat frontends supporting Ollama, such as Open WebUI, to access LightRAG easily.
 
-###Connect Open WebUI to MiniRAG Enhanced
+### Connect Open WebUI to MiniRAG Enhanced
 After starting the MiniRAG Enhanced-server, you can add an Ollama-type connection in the Open WebUI admin panel. And then a model named lightrag:latest will appear in Open WebUI's model management interface. Users can then send queries to MiniRAG Enhanced through the chat interface.
 
 Open WebUI uses an LLM to do the session title and session keyword generation task. So the Ollama chat completion API detects and forwards OpenWebUI session-related requests directly to the underlying LLM. See the [LightRAG Server](https://github.com/JoshuaRL/LightRAG/tree/main/lightrag/api) documentation for more information, as well as other runtime variables to be added to the .env file.
 
-###Credits
+### Credits
 MiniRAG Enhanced builds upon these excellent open-source projects:
 
 [LightRAG](https://github.com/HKUDS/LightRAG) - Lightweight RAG with extensive features
@@ -180,5 +180,5 @@ MiniRAG Enhanced builds upon these excellent open-source projects:
 [PostgreSQL](https://github.com/postgres/postgres) - Advanced open source relational database
 [Neo4j](https://github.com/neo4j/neo4j) - Graph database platform
 
-###License
+### License
 MIT License - See [LICENSE](https://github.com/JoshuaRL/MiniRAG-Enhanced/blob/main/LICENSE) for detail
