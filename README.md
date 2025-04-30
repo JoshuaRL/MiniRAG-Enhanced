@@ -107,7 +107,7 @@ MiniRAG-Enhanced/
 ├── .github/workflows/       # GitHub Actions for CI/CD
 │   ├── build-minirag.yml    # Workflow for MiniRAG container
 │   └── build-webui.yml      # Workflow for WebUI container
-├── .env.example             # Example server configuration file
+├── .env.ex             # Example server configuration file
 └── api_entrypoint.py        # API Python Script
 ├── data/                    # Persistent data volume
 └── config/                  # Configuration files
