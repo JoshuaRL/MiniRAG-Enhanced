@@ -25,7 +25,7 @@ RUN git clone -b ${LIGHTRAG_VERSION} https://github.com/HKUDS/LightRAG.git . \
     && pip install --no-cache-dir -e ".[ui]"
 
 # Copy .env.example from your host into the builder stage
-COPY .env.example /app/.env.example
+COPY .env.ex /app/.env.ex
 
 # Final stage
 FROM python:3.11-slim
