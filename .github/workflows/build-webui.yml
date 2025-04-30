@@ -89,7 +89,7 @@ jobs:
         if: steps.check_upstream.outputs.should_build == 'true'
         uses: docker/build-push-action@v4
         with:
-          context: ./MiniRAG-WebUI
+          context: ./
           file: ./Dockerfile.webui
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
