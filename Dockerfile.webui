@@ -33,11 +33,11 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Copy configuration file first to ensure it exists
-COPY --from=builder /app/.env.example .env.example
+COPY --from=builder /app/.env.ex .env.ex
 
 # Conditionally copy .env.example to .env only if .env doesn't exist
 RUN if [ ! -f "/app/.env" ]; then \
-    cp /app/.env.example /app/.env; \
+    cp /app/.env.ex /app/.env; \
   fi
 
 # Expose the port for the WebUI frontend
