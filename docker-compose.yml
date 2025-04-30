@@ -34,9 +34,9 @@ services:
     ports:
       - "7070:7070"
     depends_on:
-      - minirag
+      - minirag-server
     environment:
-      - API_URL=http://minirag:7861
+      - API_URL=http://minirag-server:7861
       - JWT_SECRET=your-secret-key-here
       - TOKEN_EXPIRE_HOURS=4
     networks:
