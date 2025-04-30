@@ -166,25 +166,18 @@ services:
 
 LightRAG provides Ollama-compatible interfaces, aiming to emulate LightRAG as an Ollama chat model. This allows AI chat frontends supporting Ollama, such as Open WebUI, to access LightRAG easily.
 
-Connect Open WebUI to LightRAG
-After starting the lightrag-server, you can add an Ollama-type connection in the Open WebUI admin panel. And then a model named lightrag:latest will appear in Open WebUI's model management interface. Users can then send queries to LightRAG through the chat interface. You should install LightRAG as a service for this use case.
+###Connect Open WebUI to MiniRAG Enhanced
+After starting the MiniRAG Enhanced-server, you can add an Ollama-type connection in the Open WebUI admin panel. And then a model named lightrag:latest will appear in Open WebUI's model management interface. Users can then send queries to MiniRAG Enhanced through the chat interface.
 
-Open WebUI uses an LLM to do the session title and session keyword generation task. So the Ollama chat completion API detects and forwards OpenWebUI session-related requests directly to the underlying LLM. See the 
-LightRAG Server documentation
-
- for more information, as well as other runtime variables to be added to the .env file.
+Open WebUI uses an LLM to do the session title and session keyword generation task. So the Ollama chat completion API detects and forwards OpenWebUI session-related requests directly to the underlying LLM. See the [LightRAG Server](https://github.com/JoshuaRL/LightRAG/tree/main/lightrag/api) documentation for more information, as well as other runtime variables to be added to the .env file.
 
 ###Credits
 MiniRAG Enhanced builds upon these excellent open-source projects:
 
 [LightRAG](https://github.com/HKUDS/LightRAG) - Lightweight RAG with extensive features
-
 [MiniRAG](https://github.com/HKUDS/MiniRAG)- Compact RAG for small LLMs
-
 [Ollama](https://github.com/ollama/ollama) - Run large language models locally
-
 [PostgreSQL](https://github.com/postgres/postgres) - Advanced open source relational database
-
 [Neo4j](https://github.com/neo4j/neo4j) - Graph database platform
 
 ###License
