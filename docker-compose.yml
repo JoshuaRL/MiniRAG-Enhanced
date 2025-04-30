@@ -5,12 +5,12 @@
 version: '3.8'
 
 services:
-  minirag:
+  minirag-server:
     image: ghcr.io/joshuarl/minirag-enhanced-minirag:latest
-    container_name: minirag
-      args:
-        MINIRAG_VERSION: main
-        LIGHTRAG_VERSION: main
+    container_name: minirag-server
+    args:
+      MINIRAG_VERSION: main
+      LIGHTRAG_VERSION: main
     ports:
       - "7861:7861"
     volumes:
@@ -26,11 +26,11 @@ services:
       - minirag-network
     restart: unless-stopped
 
-  webui:
+  minirag-webui:
     image: ghcr.io/joshuarl/minirag-enhanced-webui:latest
     container_name: minirag-webui
-      args:
-        LIGHTRAG_VERSION: main
+    args:
+      LIGHTRAG_VERSION: main
     ports:
       - "7070:7070"
     depends_on:
