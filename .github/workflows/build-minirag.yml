@@ -96,7 +96,7 @@ jobs:
         if: steps.check_upstream.outputs.should_build == 'true'
         uses: docker/build-push-action@v4
         with:
-          context: ./MiniRAG-Server
+          context: ./
           file: ./Dockerfile.server
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
