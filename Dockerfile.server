@@ -66,12 +66,12 @@ RUN if [ -d /app/LightRAG/lightrag/connectors/ollama ]; then \
 
 # Create the API-related modules to enable WebUI connection
 WORKDIR /app/MiniRAG
-RUN mkdir -p minirag/api \
-RUN if [ -d /app/LightRAG/lightrag/api/routes ]; then \
-    cp -r /app/LightRAG/lightrag/api/routes /app/MiniRAG/minirag/api/; \
+RUN mkdir -p minirag/api && \
+    if [ -d /app/LightRAG/lightrag/api/routes ]; then \
+        cp -r /app/LightRAG/lightrag/api/routes /app/MiniRAG/minirag/api/; \
     fi && \
     if [ -d /app/LightRAG/lightrag/api/schemas ]; then \
-    cp -r /app/LightRAG/lightrag/api/schemas /app/MiniRAG/minirag/api/; \
+        cp -r /app/LightRAG/lightrag/api/schemas /app/MiniRAG/minirag/api/; \
     fi
 
 # Create configuration directories
