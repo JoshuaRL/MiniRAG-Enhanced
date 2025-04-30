@@ -175,9 +175,13 @@ Open WebUI uses an LLM to do the session title and session keyword generation ta
 MiniRAG Enhanced builds upon these excellent open-source projects:
 
 [LightRAG](https://github.com/HKUDS/LightRAG) - Lightweight RAG with extensive features
+
 [MiniRAG](https://github.com/HKUDS/MiniRAG)- Compact RAG for small LLMs
+
 [Ollama](https://github.com/ollama/ollama) - Run large language models locally
+
 [PostgreSQL](https://github.com/postgres/postgres) - Advanced open source relational database
+
 [Neo4j](https://github.com/neo4j/neo4j) - Graph database platform
 
 ### License
