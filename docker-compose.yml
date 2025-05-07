@@ -12,7 +12,7 @@ services:
       MINIRAG_VERSION: main
       LIGHTRAG_VERSION: main
     ports:
-      - "7861:7861"
+      - "9621:9621"
     volumes:
       - ./data:/app/MiniRAG/data
       - ./config:/app/MiniRAG/config

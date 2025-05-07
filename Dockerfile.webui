@@ -22,7 +22,7 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 ARG LIGHTRAG_VERSION=main
 
 RUN git clone -b ${LIGHTRAG_VERSION} https://github.com/HKUDS/LightRAG.git . \
-    && pip install --no-cache-dir -e ".[ui]"
+    && pip install --no-cache-dir -e ".[api]".
 
 # Copy .env.example from your host into the builder stage
 COPY .env.ex /app/.env.ex

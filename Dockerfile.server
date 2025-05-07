@@ -94,7 +94,7 @@ WORKDIR /app/MiniRAG
 COPY --from=builder /usr/local /usr/local
 
 # Expose the default port for FastAPI (or the port your app uses)
-EXPOSE 7861
+EXPOSE 9621
 
 # Set entrypoint to run the FastAPI application using Uvicorn with authentication and Ollama emulation
 CMD ["uvicorn", "minirag.app.app:app", "--host", "0.0.0.0", "--port", "9621"]
