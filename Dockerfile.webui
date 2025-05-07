@@ -44,4 +44,4 @@ RUN if [ ! -f "/app/.env" ]; then \
 EXPOSE 7070
 
 # Set entrypoint to start the web server with authentication
-CMD ["lightrag-server"]
+CMD ["python", "-m", "lightrag.api.lightrag_server"]
